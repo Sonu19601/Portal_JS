@@ -1,9 +1,30 @@
 $(document).ready(function () {
   //DynamicCSS();
-  // Add an asterisk to the label text
+  //Making all the fields value empty
+  $(
+    "#EntityFormControl_6a0d7df1913dee11bdf4000d3af06556_EntityFormView input[type='text'],#EntityFormControl_6a0d7df1913dee11bdf4000d3af06556_EntityFormView select,#EntityFormControl_6a0d7df1913dee11bdf4000d3af06556_EntityFormView input[type='email']"
+  ).val("");
+
+  //appending the success message and validation message to the side of the button
+  var successMessage = $("#MessagePanel");
+  successMessage.remove();
+  var validationSummary = $(
+    "#ValidationSummaryEntityFormControl_6a0d7df1913dee11bdf4000d3af06556_EntityFormView"
+  );
+  validationSummary.remove();
+  $(".actions").append(validationSummary, successMessage);
+
+  //Focus after click of button
+  $("#InsertButton").click(function (event) {
+    event.preventDefault();
+    this.focus();
+  });
+
+  // Add an asterisk to the label text of aadhar
   var aadharLabel = document.getElementById("so_aadharnumber_label");
   aadharLabel.innerHTML += '<span style="color: red;"> *</span>';
 
+  //Validator for aadhar making it required based on dropdown value = India
   (function ($) {
     if (typeof Page_Validators == "undefined") return;
     // Create new validator
@@ -12,7 +33,7 @@ $(document).ready(function () {
     newValidator.id = "Required_so_aadharnumber";
     newValidator.controltovalidate = "so_aadharnumber";
     newValidator.errormessage =
-      "<a href='#so_aadharnumber_label'>aadhar field must contain value </a>";
+      "<a href='#so_aadharnumber_label'>Aadhar field must contain value </a>";
     newValidator.initialvalue = "";
     newValidator.evaluationfunction = function () {
       var country = $("#so_country").val();
@@ -35,9 +56,14 @@ $(document).ready(function () {
     });
   })(window.jQuery);
 
+  //addding css to form
   $(".entity-form").css({
     "border-radius": "10px",
     "background-color": "#FFE5E5",
+  });
+  $(".section").css({
+    width: "90%",
+    "margin-left": "10px",
   });
   const dropDownFields = {
     company: $("#so_company"),
@@ -50,6 +76,7 @@ $(document).ready(function () {
     laptop: $("#so_providelaptop"),
   };
 
+  //on dropdown change event
   $.each(dropDownFields, (key, value) => {
     value.change(function () {
       $(".checkbox").removeAttr("title");
@@ -59,39 +86,20 @@ $(document).ready(function () {
     });
   });
 
-  //$("#so_aadharnumber").prop("required", false);
-  //var aadharValidator = Page_Validators[6];
-  console.log(Page_Validators);
-  // Page_Validators[6].dispose();
-  // Page_Validators[6].isvalid = true;
+  //console.log(Page_Validators);
 
-  //var requiredValidatorAadhar = $("#RequiredFieldValidatorso_aadharnumber");
-  // console.log(aadharValidator);
-  // ValidatorEnable(aadharValidator, false);
   $("#so_aadharnumber").closest("tr").find("#so_aadharnumber_label").hide();
   $("#so_aadharnumber").closest("tr").find("#so_aadharnumber").hide();
-  // requiredValidatorAadhar.remove();
-  // $("#so_aadharnumber")
-  //   .closest("td")
-  //   .find(".info.required")
-  //   .removeClass("info required")
-  //   .addClass("info");
+
   $(dropDownFields.countryId).click(function () {
     debugger;
     if ($(this).val() == "4b04a5dd-4c37-ee11-bdf4-000d3af06556") {
       $("#so_aadharnumber").closest("tr").find("#so_aadharnumber_label").show();
       $("#so_aadharnumber").closest("tr").find("#so_aadharnumber").show();
-      // ValidatorEnable(aadharValidator, true);
-      // Page_Validators.unshift(val);
-      // console.log(Page_Validators);
     } else {
       $("#so_aadharnumber").val("");
       $("#so_aadharnumber").closest("tr").find("#so_aadharnumber_label").hide();
       $("#so_aadharnumber").closest("tr").find("#so_aadharnumber").hide();
-      // ValidatorEnable(aadharValidator, false);
-      // var val2 = Page_Validators[0];
-      // if (val === val2) {
-      //   val2.dispose();
     }
   });
 
@@ -187,7 +195,7 @@ async function ContentRetrieve(checkbox) {
       var result = data;
       //console.log(result);
       content = result.value[0].so_ContentID.so_htmlcontent;
-      //console.log(tr);
+
       $(checkbox).closest("span").attr("title", content);
     } catch (error) {
       console.log(error);
